@@ -27,12 +27,7 @@ class AdminController extends Controller
             $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
             if (is_array($htmlContents)) {
                 // Tạo một mảng mới để lưu các phần tử đã được xem trước
-                $previewHtmlContent = [];
-                foreach ($htmlContents as $content) {
-                    // Xem trước 200 ký tự của mỗi phần tử trong mảng
-                    $previewHtmlContent[] = mb_substr($content, 0, 200);
-                    $htmlContents[$contribution->id] = $previewHtmlContent;
-                }
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
             }
         }
 

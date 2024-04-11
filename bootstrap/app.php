@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'student' => \App\Http\Middleware\checkStudent::class,
             'coodinator' => \App\Http\Middleware\checkCoodinator::class,
             'manager' => \App\Http\Middleware\checkManager::class,
+            'checkdl' => \App\Http\Middleware\CheckSubmissionDeadline::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

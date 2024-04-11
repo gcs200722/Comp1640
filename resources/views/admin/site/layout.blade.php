@@ -65,6 +65,12 @@
                         <i class=" menu-icon"></i>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('submission_date.index') }}">
+                        <span class="menu-title">Submission_date</span>
+                        <i class=" menu-icon"></i>
+                    </a>
+                </li>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#"
@@ -74,9 +80,7 @@
                                 <span class="availability-status online"></span>
                             </div>
 
-                            <div class="nav-profile-text">
-                                <p class="mb-1 text-black">{{ $user->name }}</p>
-                            </div>
+
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item" href="#">
@@ -116,6 +120,7 @@
         <script src="{{ url('assets/js/dashboard.js') }}"></script>
         <script src="{{ url('assets/js/todolist.js') }}"></script>
         <!-- End custom js for this page -->
+        @yield('1')
 </body>
 
 </html>

@@ -10,22 +10,22 @@
                 @method('PUT')
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
+                    <span class="form-control" id="name">{{ $user->name }}</span>
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
+                    <span class="form-control" id="email">{{ $user->email }}</span>
                 </div>
                 <div class="form-group">
                     <label for="role">Role:</label>
                     <select class="form-control" name="role" id="role">
-                        <option value="student" {{ $user->role == 'student' ? 'selected' : '' }}>Student</option>
+                        <option value="Student" {{ $user->role == 'student' ? 'selected' : '' }}>Student</option>
                         <option value="Marketing Coordinator"
                             {{ $user->role == 'Marketing Coordinator' ? 'selected' : '' }}>Marketing Coordinator</option>
                         <option value="University Marketing Manager"
                             {{ $user->role == 'University Marketing Manager' ? 'selected' : '' }}>University Marketing
                             Manager</option>
-                        <option value="administrator" {{ $user->role == 'administrator' ? 'selected' : '' }}>Administrator
+                        <option value="Administrator" {{ $user->role == 'administrator' ? 'selected' : '' }}>Administrator
                         </option>
                     </select>
                 </div>
