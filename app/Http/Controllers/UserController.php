@@ -110,14 +110,13 @@ class UserController extends Controller
         return view('admin.edit', compact('user'));
     }
 
-    public function update(User $user)
+    public function update(Request $request, User $user)
     {
-        request()->validate([
+        $request->validate([
             'role' => 'required|in:Administrator,Student,Marketing Coordinator,University Marketing Manager',
             'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology',
         ]);
-        $data = request()->only('role', 'faculty');
-        $user->update($data);
+        $user->update($request->only('role', 'faculty'));
 
         return redirect()->route('user.index');
     }

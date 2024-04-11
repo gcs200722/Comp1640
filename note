@@ -1,0 +1,5 @@
+lấy file về phải 
+1 composer install
+2 sửa .env
+3 tạo DB với tên giống với DB trong tệp .env 
+4 composer artisan migrate 
