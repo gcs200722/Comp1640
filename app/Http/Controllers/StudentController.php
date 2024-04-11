@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contribution;
+use App\Models\SubmissionDate;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -12,9 +13,18 @@ class StudentController extends Controller
         return view('student.home');
     }
 
+    public function close()
+    {
+        $submissionDate = SubmissionDate::orderBy('id', 'desc')->first();
+
+        return view('student.close', compact('submissionDate'));
+    }
+
     public function formsubmit()
     {
-        return view('student.submit');
+        $submissionDate = SubmissionDate::orderBy('id', 'desc')->first();
+
+        return view('student.submit', compact('submissionDate'));
     }
 
     public function store(Request $request)

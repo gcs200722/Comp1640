@@ -7,6 +7,10 @@
                 {{ session()->get('success') }}
             </div>
         @endif
+        <div class="deadline-notification">
+            <p>Deadline for submission: {{ $submissionDate->closed_at }}</p>
+            <p>Please submit your contribution before this date to ensure it is considered.</p>
+        </div>
         <div class="col-md-8">
             <div class="card bg- text-white">
                 <h5 class="card-header">Contribution Submit</h5>
