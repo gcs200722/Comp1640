@@ -37,6 +37,7 @@ Route::group(['prefix' => '/student', 'middleware' => 'student'], function () {
     Route::get('/contributions', [StudentController::class, 'formsubmit'])->name('student.submit')->middleware('checkdl');
     Route::post('/contribution', [StudentController::class, 'store'])->name('contributions.store');
     Route::get('/close', [StudentController::class, 'close'])->name('submission_closed');
+    Route::get('/contributions/show', [StudentController::class, 'show'])->name('student.show');
 });
 
 Route::group(['prefix' => '/manager', 'middleware' => 'manager'], function () {
@@ -50,6 +51,7 @@ Route::group(['prefix' => '/coodinator', 'middleware' => 'coodinator'], function
     Route::get('/approvecontribution', [CoodinatorController::class, 'approvecontribution'])->name('contribution.approve');
     Route::get('/rejectedcontribution', [CoodinatorController::class, 'rejectedcontribution'])->name('contribution.rejected');
     Route::put('/contribution/approve/{id}', [ContributionController::class, 'approve'])->name('approve');
+    Route::DELETE('/contribution/delete/{id}', [ContributionController::class, 'destroy'])->name('delete');
     Route::put('/contribbution/reject/{id}', [ContributionController::class, 'reject'])->name('reject');
     Route::get('/', [CoodinatorController::class, 'home'])->name('coodinator.home');
 })->middleware('coodiinator');

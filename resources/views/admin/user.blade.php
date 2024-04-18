@@ -16,7 +16,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <a href="{{ route('user.create') }}" class="btn-btn primary">Create New User</a>
+                        <a href="{{ route('user.create') }}" class="herf">Create New User</a>
                         <tbody>
                             @foreach ($users as $user)
                                 <tr>

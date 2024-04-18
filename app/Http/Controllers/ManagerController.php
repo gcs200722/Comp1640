@@ -16,7 +16,7 @@ class ManagerController extends Controller
     public function showcontribution()
     {
         $contributions = Contribution::where('status', 'accepted')
-            ->paginate(2);
+            ->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {

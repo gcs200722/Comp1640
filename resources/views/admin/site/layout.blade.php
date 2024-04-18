@@ -77,6 +77,8 @@
 
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('logout') }}">
                                 <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
@@ -112,8 +114,7 @@
         <script src="{{ url('assets/js/dashboard.js') }}"></script>
         <script src="{{ url('assets/js/todolist.js') }}"></script>
         <!-- End custom js for this page -->
-
+        @yield('1')
 </body>
-@yield('1')
 
 </html>
