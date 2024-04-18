@@ -14,7 +14,6 @@
         <div id="topbar" class="clear">
             <nav>
                 <ul>
-                    <li><a href="{{ route('student.home') }}">Home</a></li>
                     <li><a href="{{ route('logout') }}">SignOut</a></li>
                 </ul>
             </nav>
@@ -23,7 +22,7 @@
     <div class="wrapper row1">
         <header id="header" class="clear">
             <div id="logo" class="fl_left">
-                <h1><a href="{{ route('student.home') }}">University</a></h1>
+                <h1><a href="#">University</a></h1>
                 <p>University magazine</p>
             </div>
         </header>

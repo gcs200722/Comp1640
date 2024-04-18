@@ -179,7 +179,7 @@ class UserController extends Controller
             [
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
-                'password' => 'required|same:password_confirmation',
+                'password' => 'required|same:confirm_password',
                 'role' => 'required|in:Administrator,Student,Marketing Coordinator,University Marketing Manager',
                 'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology',
             ]

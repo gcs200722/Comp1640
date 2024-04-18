@@ -34,63 +34,58 @@ class ManagerController extends Controller
 
     public function downloadContributions()
     {
-        // Lấy danh sách các đóng góp và nội dung HTML tương ứng từ phương thức showcontribution
-        $contributions = Contribution::where('status', 'accepted')->paginate(2);
-        $htmlContents = [];
-        $imageFiles = [];
-        foreach ($contributions as $contribution) {
-            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
+        try {
+            // Lấy danh sách các đóng góp đã được chấp nhận từ cơ sở dữ liệu
+            $contributions = Contribution::where('status', 'accepted')->get();
+            $zipFileName = 'contributions.zip';
+            $zipFilePath = storage_path('app/'.$zipFileName);
+            // Tạo đối tượng ZipArchive
+            $zip = new ZipArchive;
+            if ($zip->open($zipFilePath, ZipArchive::CREATE) !== true) {
+                throw new \Exception('Không thể tạo tệp ZIP.');
+            }
 
-            // Lặp qua các phần của tài liệu và trích xuất hình ảnh
-            foreach ($phpWord->getSections() as $section) {
-                foreach ($section->getElements() as $element) {
-                    if ($element instanceof \PhpOffice\PhpWord\Element\Image) {
-                        $imageContent = $element->getPath();
-                        $imageFileName = 'image_'.uniqid().'.'.pathinfo($imageContent, PATHINFO_EXTENSION);
-                        $imageFiles[$imageFileName] = file_get_contents($imageContent);
-                        // Thay đổi đường dẫn của hình ảnh trong tài liệu thành tên tệp hình ảnh tạm thời
-                        $element->setPath($imageFileName);
-                    }
+            // Duyệt qua từng đóng góp để xử lý
+            foreach ($contributions as $contribution) {
+                // Lấy tiêu đề, nội dung, đường dẫn tới tệp Word và tệp hình ảnh từ cơ sở dữ liệu
+                $imagePath = storage_path('app/public/'.$contribution->image_path);
+                $title = $contribution->title;
+                $content = $contribution->content;
+
+                $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+
+                // Kiểm tra xem tệp Word và tệp hình ảnh có tồn tại không
+                if (! file_exists($wordFilePath) || ! file_exists($imagePath)) {
+                    continue; // Bỏ qua đóng góp nếu không có tệp Word hoặc hình ảnh
                 }
+
+                // Load tệp Word
+                $phpWord = IOFactory::load($wordFilePath);
+
+                // Tạo một đối tượng HTML writer
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+
+                // Lấy nội dung HTML từ đối tượng Writer
+                $htmlContent = $htmlWriter->getContent();
+                $htmlContent .= '<img src="'.$imagePath.'" alt="Hình ảnh đóng góp">';
+                // Thêm tiêu đề và nội dung vào nội dung HTML
+                $htmlContent = '<h1>'.$title.'</h1><p>'.$content.'</p>'.$htmlContent;
+
+                // Lưu nội dung HTML vào tệp HTML tạm thời
+                $htmlFilePath = storage_path('app/temporary_html/contribution_'.$contribution->id.'.html');
+                file_put_contents($htmlFilePath, $htmlContent);
+
+                // Thêm tệp HTML vào tệp ZIP
+                $zip->addFile($htmlFilePath, 'contribution_'.$contribution->id.'.html');
             }
 
-            // Lưu nội dung HTML tạm thời
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContent = $htmlWriter->getContent(); // Lấy nội dung HTML từ đối tượng Writer
-
-            // Lưu nội dung HTML vào một biến chuỗi
-            $htmlFilePath = storage_path('app/tempo/temporary_html.html');
-            file_put_contents($htmlFilePath, $htmlContent);
-
-            // Thêm hình ảnh vào nội dung HTML
-            $htmlContents[$contribution->id] = $htmlContent;
-        }
-
-        // Tạo một tệp tin ZIP mới
-        $zip = new ZipArchive;
-        $zipFileName = 'contributions.zip';
-
-        if ($zip->open(storage_path('app/'.$zipFileName), ZipArchive::CREATE) === true) {
-            // Thêm các tệp HTML vào tệp tin ZIP
-            foreach ($htmlContents as $contributionId => $htmlContent) {
-                $htmlFileName = 'contribution_'.$contributionId.'.html';
-                $zip->addFromString($htmlFileName, $htmlContent);
-            }
-
-            // Thêm các tệp hình ảnh vào tệp tin ZIP
-            foreach ($imageFiles as $imageFileName => $imageFileContent) {
-                $zip->addFromString($imageFileName, $imageFileContent);
-            }
-
-            // Đóng tệp tin ZIP
+            // Đóng tệp ZIP
             $zip->close();
 
-            // Trả về tệp tin ZIP cho người dùng
-            return response()->download(storage_path('app/'.$zipFileName))->deleteFileAfterSend(true);
-        } else {
-            // Xử lý lỗi nếu không thể tạo tệp tin ZIP
-            return back()->with('error', 'Không thể tạo tệp ZIP.');
+            // Trả về tệp ZIP cho người dùng để tải xuống
+            return response()->download($zipFilePath)->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Có lỗi xảy ra: '.$e->getMessage());
         }
     }
 }

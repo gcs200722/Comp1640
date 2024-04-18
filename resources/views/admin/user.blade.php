@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card bg- text-white">
-                <h5 class="card-header">Accounts List</h5>
+                <li class="card-header" style="color: black">Accounts List</li>
                 <div class="card-body">
                     <table class="table table-bordered w-90 mx-auto">
                         <thead>
@@ -16,6 +16,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
+                        <a href="{{ route('user.create') }}" class="btn-btn primary">Create New User</a>
                         <tbody>
                             @foreach ($users as $user)
                                 <tr>
