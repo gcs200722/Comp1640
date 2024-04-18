@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="{{ url('assets/images/favicon.ico') }}" />
 </head>
 
-<body>
+<body style="background-color: #06213F;">
     <div class="container-scroller">
 
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
