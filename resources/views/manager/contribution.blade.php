@@ -16,25 +16,6 @@
                         <div style="width: 600px; height: 400px; overflow: auto ; color:rgb(132, 144, 155)">
                             {!! $htmlContents[$contribution->id] !!}</div>
                     @endif
-                <li>
-                    @if ($contribution->word_file_path)
-                        <a href="{{ asset('storage/' . $contribution->word_file_path) }}" download>Download Word File</a><br>
-                    @endif
-
-                    <form method="post" action="{{ route('approve', $contribution->id) }}">
-                        @csrf
-                        @method('put')
-                        <button class="btn btn-primary" type="submit">Approve</button>
-                    </form>
-
-                    <form method="post" action="{{ route('reject', $contribution->id) }}">
-                        @csrf
-                        @method('put')
-                        <button class="btn btn-danger" type="submit">Reject</button>
-                    </form>
-                </li>
-                <!-- Hiển thị tệp tin Word nếu có -->
-
                 </li>
             @endforeach
         </ul>
@@ -43,4 +24,5 @@
         </div>
         </div>
     </ul>
+    <a href="{{ route('download.contributions') }}" class="btn btn-primary">Tải xuống tất cả đóng góp</a>
 @endsection

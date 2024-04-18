@@ -2,16 +2,104 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contribution;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpWord\IOFactory;
 
 class UserController extends Controller
 {
     public function login()
     {
         return view('login');
+    }
+
+    public function guest_login()
+    {
+        return view('guest_login');
+    }
+
+    public function check_guest_login(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'faculty' => 'required',
+        ]);
+
+        $name = $validatedData['name'];
+        $faculty = $validatedData['faculty'];
+        if ($faculty === 'Business administration') {
+            return redirect()->route('guest.BA');
+        } elseif ($faculty === 'Graphics and Digital Design') {
+            return redirect()->route('guest.graphics');
+        } elseif ($faculty === 'Information technology') {
+            return redirect()->route('guest.IT');
+        }
+    }
+
+    public function BA_index()
+    {
+        $userFaculty = user::where('faculty', 'Business administration')->first();
+        $contributions = Contribution::where('user_id', $userFaculty->id)
+            ->where('status', 'accepted')
+            ->paginate(2);
+        // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
+        $htmlContents = [];
+        foreach ($contributions as $contribution) {
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $phpWord = IOFactory::load($wordFilePath);
+            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+        }
+
+        return view('guest.BA', [
+            'contributions' => $contributions,
+            'htmlContents' => $htmlContents,
+        ]);
+    }
+
+    public function graphics_index()
+    {
+        $userFaculty = user::where('faculty', 'Graphics and Digital Design')->first();
+        $contributions = Contribution::where('user_id', $userFaculty->id)
+            ->where('status', 'accepted')
+            ->paginate(2);
+        // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
+        $htmlContents = [];
+        foreach ($contributions as $contribution) {
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $phpWord = IOFactory::load($wordFilePath);
+            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+        }
+
+        return view('guest.graphics', [
+            'contributions' => $contributions,
+            'htmlContents' => $htmlContents,
+        ]);
+    }
+
+    public function IT_index()
+    {
+        $userFaculty = user::where('faculty', 'Information technology')->first();
+        $contributions = Contribution::where('user_id', $userFaculty->id)
+            ->where('status', 'accepted')
+            ->paginate(2);
+        // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
+        $htmlContents = [];
+        foreach ($contributions as $contribution) {
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $phpWord = IOFactory::load($wordFilePath);
+            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+        }
+
+        return view('guest.IT', [
+            'contributions' => $contributions,
+            'htmlContents' => $htmlContents,
+        ]);
     }
 
     public function check_login()

@@ -12,5 +12,5 @@
         </div>
     </div>
     <div class="col-md-8" style="box-align: 500px">The submission portal is temporarily closed. Please wait until it reopens
-        on the following day{{ $submissionDate->reopen_at }}</div>
+        on the following day : {{ $submissionDate->reopen_at }}</div>
 @endsection

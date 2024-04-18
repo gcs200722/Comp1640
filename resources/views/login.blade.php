@@ -47,7 +47,9 @@
                 <div class="links">
                     Don't have account? <a href="{{ route('register') }}">Sign Up Now</a>
                 </div>
-
+                <div class="links">
+                    <a href="{{ route('guest.login') }}">Login with Guest</a>
+                </div>
             </form>
         </div>
     </div>
