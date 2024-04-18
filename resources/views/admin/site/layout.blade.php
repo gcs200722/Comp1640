@@ -55,12 +55,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contributions.show') }}">
-                        <span class="menu-title">List Contribution</span>
-                        <i class=" menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{ route('submission_date.index') }}">
                         <span class="menu-title">Submission_date</span>
                         <i class=" menu-icon"></i>

@@ -5,12 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\Contribution;
 use App\Models\SubmissionDate;
 use Illuminate\Http\Request;
+use PhpOffice\PhpWord\IOFactory;
 
 class StudentController extends Controller
 {
     public function home()
     {
-        return view('student.home');
+        $user = auth()->user();
+
+        return view('student.home', compact('user'));
+    }
+
+    public function show()
+    {
+        $user = auth()->user();
+        $contributions = contribution::where('user_id', $user->id)->get();
+        $htmlContents = [];
+        foreach ($contributions as $contribution) {
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $phpWord = IOFactory::load($wordFilePath);
+            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+        }
+
+        return view('student.show', compact('user', 'contributions', 'htmlContents'));
     }
 
     public function close()

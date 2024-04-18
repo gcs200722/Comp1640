@@ -25,4 +25,11 @@ class ContributionController extends Controller
         return redirect()->back()->with('success', '((:');
         // Redirect hoặc trả về thông báo thành công
     }
+
+    public function destroy(Contribution $contribution)
+    {
+        $contribution->delete();
+
+        return redirect()->back()->with('success', 'Delete successfuly!');
+    }
 }

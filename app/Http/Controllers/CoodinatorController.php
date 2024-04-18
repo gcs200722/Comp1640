@@ -9,7 +9,9 @@ class CoodinatorController extends Controller
 {
     public function home()
     {
-        return view('coodinator.home');
+        $user = auth()->user();
+
+        return view('coodinator.home', compact('user'));
     }
 
     public function showcontribution()
@@ -40,7 +42,7 @@ class CoodinatorController extends Controller
         $userFaculty = $user->faculty;
         $contributions = Contribution::where('status', 'accepted')->whereHas('user', function ($query) use ($userFaculty) {
             $query->where('faculty', $userFaculty);
-        })->paginate(2);
+        })->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
@@ -62,7 +64,7 @@ class CoodinatorController extends Controller
         $userFaculty = $user->faculty;
         $contributions = Contribution::where('status', 'rejected')->whereHas('user', function ($query) use ($userFaculty) {
             $query->where('faculty', $userFaculty);
-        })->paginate(2);
+        })->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
