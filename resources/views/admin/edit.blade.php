@@ -42,7 +42,7 @@
         </form>
     </div>
 </div>
-<div class="card-body">
+<!-- <div class="card-body">
     <form method="POST" action="{{ route('user.update', $user->id) }}">
         @csrf
         @method('PUT')
@@ -78,6 +78,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-</div>
+</div> -->
 </div>
 @endsection
