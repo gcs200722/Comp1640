@@ -1,16 +1,14 @@
 @extends('admin.site.layout')
 @section('1')
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card bg- text-white">
-            <h5 class="card-header">Submission_Date</h5>
-            <div class="card-body">
-                <div class="container">
-                    <div class="row justify-content-center">
+<div class="container mt-5">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card-body mt-5">
+                <div class="container mt-5">
+                    <div class="row justify-content-center ">
                         <div class="col-md-8">
                             <div class="card">
-                                <div class="card-header" style="color: rgb(21, 14, 2)">Edit Submission Dates</div>
-
+                                <div class="card-header bg-primary text-white">Submission Dates</div>
                                 <div class="card-body">
                                     @foreach ($submissionDate as $submissionDate)
                                     <form method="POST" action="{{ route('submission_date.update', $submissionDate->id) }}">
@@ -31,18 +29,20 @@
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                         </form>
-                                        <a href="{{ route('submission_date.edit', $submissionDate->id) }}" class="btn btn-primary">Edit</a>
+                                        <a href="{{ route('submission_date.edit', $submissionDate->id) }}" class="btn btn-primary mt-4">Edit</a>
 
                                     </form>
                                     @endforeach
-                                    <a href="{{ route('submission_date.create') }}" class="btn btn-primary">Create</a>
+                                    <a href="{{ route('submission_date.create') }}" class="btn btn-primary mt-4">Create</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
 @endsection

@@ -48,7 +48,7 @@ class UserController extends Controller
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
-            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $wordFilePath = storage_path('app/public/' . $contribution->word_file_path);
             $phpWord = IOFactory::load($wordFilePath);
             $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
             $htmlContents[$contribution->id] = $htmlWriter->getContent();
@@ -69,7 +69,7 @@ class UserController extends Controller
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
-            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $wordFilePath = storage_path('app/public/' . $contribution->word_file_path);
             $phpWord = IOFactory::load($wordFilePath);
             $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
             $htmlContents[$contribution->id] = $htmlWriter->getContent();
@@ -90,7 +90,7 @@ class UserController extends Controller
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
-            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $wordFilePath = storage_path('app/public/' . $contribution->word_file_path);
             $phpWord = IOFactory::load($wordFilePath);
             $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
             $htmlContents[$contribution->id] = $htmlWriter->getContent();
@@ -179,7 +179,7 @@ class UserController extends Controller
             [
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
-                'password' => 'required|same:confirm_password',
+                'password' => 'required',
                 'role' => 'required|in:Administrator,Student,Marketing Coordinator,University Marketing Manager',
                 'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology',
             ]

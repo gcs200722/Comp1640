@@ -18,90 +18,63 @@
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ url('assets/images/favicon.ico') }}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://www.oxfordinternationaleducationgroup.com/wp-content/uploads/2022/06/Banner-4.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed
+        }
+    </style>
+
 </head>
 
-<body style="background-image: url('https://www.oxfordinternationaleducationgroup.com/wp-content/uploads/2022/06/Banner-4.png'); background-size: cover;background-position: center;background-attachment: fixed;">
+<body>
     <div class="container-scroller">
 
-        <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo" href="{{ route('admin.home') }}">
-                    <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/12/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.png" alt="logo" style="width: auto; height: 80px" />
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="{{ route('admin.home') }}">
+                    <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/12/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.png" alt="logo" style="width: auto; height: 70px;" />
                 </a>
-                <a class="navbar-brand brand-logo-mini" href="{{ route('admin.home') }}">
-                    <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/12/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.png" alt="logo" />
-                </a>
-            </div>
-            <div class="navbar-menu-wrapper d-flex align-items-stretch">
-                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                    <span class="mdi mdi-menu"></span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto font-weight-bold fs-5 ">
+                        <li class="nav-item ms-5">
+                            <a class="nav-link" href="{{ route('admin.home') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item ms-5">
+                            <a class="nav-link" href="{{ route('user.index') }}">List User</a>
+                        </li>
+                        <li class="nav-item ms-5">
+                            <a class="nav-link" href="{{ route('submission_date.index') }}">Submission date</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg" alt="avatar img" style="width: auto; height: 50px" class="rounded-circle">
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#"><i class="mdi mdi-cached me-2 text-success"></i> Activity Log</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ route('logout') }}"><i class="mdi mdi-logout me-2 text-primary"></i> Sign out</a></li>
+                            </ul>
+                        </li>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.home') }}">
-                                    <span class="menu-title">Dashboard</span>
-                                    <i class="mdi mdi-home menu-icon"></i>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
-                                    <span class="menu-title">List User</span>
-                                    <i class=" menu-icon"></i>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('submission_date.index') }}">
-                                    <span class="menu-title">Submission date</span>
-                                    <i class=" menu-icon"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <form class="form-inline my-2 my-lg-0">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Search projects" aria-label="Search projects" aria-describedby="basic-addon1">
-                            </div>
-                        </form>
-                    </div>
-                </nav>
-
-                <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item nav-profile dropdown">
-                        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="nav-profile-img">
-                                <span class="availability-status online"></span>
-                                <img src="https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg" alt="avatar img" style="width: 50px; height: 50px">
-                            </div>
-
-
-                        </a>
-                        <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                            <a class="dropdown-item" href="#">
-                                <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('logout') }}">
-                                <i class="mdi mdi-logout me-2 text-primary"></i> Sign out </a>
-                        </div>
-                    </li>
-                    <li class="nav-item d-none d-lg-block full-screen-link">
-                        <a class="nav-link">
-                            <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
-                        </a>
-                    </li>
-                </ul>
-                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-                    <span class="mdi mdi-menu"></span>
-                </button>
+                    </ul>
+                </div>
             </div>
         </nav>
+
+
         <!-- partial -->
         <!-- container-scroller -->
         <!-- plugins:js -->
