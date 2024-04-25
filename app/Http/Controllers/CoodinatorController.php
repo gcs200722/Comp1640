@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contribution;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpWord\IOFactory;
 
 class CoodinatorController extends Controller
@@ -12,6 +16,50 @@ class CoodinatorController extends Controller
         $user = auth()->user();
 
         return view('coodinator.home', compact('user'));
+    }
+
+    public function dashboard(Request $request)
+    {
+        // Lấy người dùng hiện tại và khoa của họ
+        $user = Auth::user();
+        $faculty = $user->faculty;
+
+        // Lấy giá trị tháng từ request
+        $selectedMonth = $request->input('month');
+        if (! $selectedMonth) {
+            $filteredData = Contribution::all();
+        } else {
+            // Tạo đối tượng Carbon từ tháng đã chọn
+            $selectedDate = Carbon::createFromFormat('Y-m', $selectedMonth);
+
+            // Lọc dữ liệu theo tháng và năm đã chọn
+            $filteredData = Contribution::whereYear('approval_date', $selectedDate->year)
+                ->whereMonth('approval_date', $selectedDate->month)
+                ->get();
+        }
+        // Truy vấn cơ sở dữ liệu để lấy số lượng bài nộp theo 'status' của người dùng trong khoa của họ
+        $query = Contribution::whereHas('user', function ($query) use ($faculty) {
+            $query->where('faculty', $faculty);
+        });
+
+        // Áp dụng điều kiện lọc theo tháng nếu có
+        if ($selectedMonth) {
+            $query->whereMonth('approval_date', $selectedDate->month);
+        }
+
+        $contributionsByStatus = $query->select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->get();
+
+        // Chuẩn bị dữ liệu cho biểu đồ
+        $statusLabels = $contributionsByStatus->pluck('status')->unique();
+
+        $data = [];
+        foreach ($statusLabels as $status) {
+            $data[$status] = $contributionsByStatus->where('status', $status)->pluck('count');
+        }
+
+        return view('coodinator.dashboard', compact('statusLabels', 'data'));
     }
 
     public function showcontribution()

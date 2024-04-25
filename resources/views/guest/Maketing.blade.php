@@ -14,7 +14,7 @@
         <div id="topbar" class="clear">
             <nav>
                 <ul>
-                    <li><a href="{{ route('guest.graphics') }}">Home</a></li>
+                    <li><a href="{{ route('guest.IT') }}">Home</a></li>
                     <li><a href="{{ route('logout') }}">SignOut</a></li>
                 </ul>
             </nav>
@@ -33,7 +33,7 @@
         <div class="rounded">
             <nav id="mainav" class="clear">
                 <ul class="clear">
-                    <h2>Approve Contribution Of Graphics Design</h2>
+                    <h2>Approve Contribution Of Maketing</h2>
                 </ul>
             </nav>
         </div>

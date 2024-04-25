@@ -3,16 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contribution;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpWord\IOFactory;
 
 class AdminController extends Controller
 {
     public function home()
     {
-        $user = Auth::user();
+        return view('admin.home');
+    }
 
-        return view('admin.home', compact('user'));
+    public function dashboard()
+    {
+        $roleCounts = User::select('role', DB::raw('count(*) as count'))
+            ->groupBy('role')
+            ->get();
+
+        return view('admin.dashboard', compact('roleCounts'));
     }
 
     public function showcontribution()
@@ -22,7 +30,7 @@ class AdminController extends Controller
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
-            $wordFilePath = storage_path('app/public/' . $contribution->word_file_path);
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
             $phpWord = IOFactory::load($wordFilePath);
             $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
             if (is_array($htmlContents)) {

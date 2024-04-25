@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contribution;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpWord\IOFactory;
 use ZipArchive;
 
@@ -11,6 +14,55 @@ class ManagerController extends Controller
     public function home()
     {
         return view('manager.home');
+    }
+
+    public function dashboard(Request $request)
+    {
+        // Lấy giá trị tháng từ request
+        $selectedMonth = $request->input('month');
+
+        // Nếu không có tháng được chọn, sẽ lấy toàn bộ dữ liệu
+        if (! $selectedMonth) {
+            $filteredData = Contribution::all();
+        } else {
+            // Tạo đối tượng Carbon từ tháng đã chọn
+            $selectedDate = Carbon::createFromFormat('Y-m', $selectedMonth);
+
+            // Lọc dữ liệu theo tháng và năm đã chọn
+            $filteredData = Contribution::whereYear('approval_date', $selectedDate->year)
+                ->whereMonth('approval_date', $selectedDate->month)
+                ->get();
+        }
+
+        // Truy vấn cơ sở dữ liệu để lấy số lượng bài nộp được chấp nhận theo từng khoa
+        $contributionsByFaculty = Contribution::where('status', 'accepted')
+            ->join('users', 'contributions.user_id', '=', 'users.id');
+
+        // Áp dụng điều kiện lọc tháng và năm nếu có
+        if ($selectedMonth) {
+            $contributionsByFaculty->whereMonth('approval_date', $selectedDate->month);
+        }
+
+        // Hoàn thành truy vấn và lấy dữ liệu
+        $contributionsByFaculty = $contributionsByFaculty->select('users.faculty', DB::raw('count(*) as count'))
+            ->groupBy('users.faculty')
+            ->get();
+
+        // Chuẩn bị dữ liệu cho biểu đồ
+        $facultyNames = $contributionsByFaculty->pluck('faculty');
+        $contributionCounts = $contributionsByFaculty->pluck('count');
+        $totalCount = $contributionsByFaculty->sum('count');
+
+        // Tính toán phần trăm cho mỗi khoa
+        $percentageByFaculty = $contributionsByFaculty->map(function ($faculty) use ($totalCount) {
+            return [
+                'faculty' => $faculty['faculty'],
+                'percentage' => ($faculty['count'] / $totalCount) * 100,
+            ];
+        });
+
+        // Trả về view với dữ liệu cho biểu đồ
+        return view('manager.dashboard', compact('filteredData', 'facultyNames', 'contributionCounts', 'percentageByFaculty'));
     }
 
     public function showcontribution()

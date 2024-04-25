@@ -24,6 +24,8 @@
                         <option value="Business administration">Business Administration</option>
                         <option value="Graphics and Digital Design">Graphics and Digital Design</option>
                         <option value="Information technology">Information Technology</option>
+                        <option value="Maketing">Maketing</option>
+                        <option value="Public Relation">Public Relation</option>
                     </select>
                 </div>
                 <div class="field ">

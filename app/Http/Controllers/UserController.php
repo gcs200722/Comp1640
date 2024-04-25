@@ -36,7 +36,12 @@ class UserController extends Controller
             return redirect()->route('guest.graphics');
         } elseif ($faculty === 'Information technology') {
             return redirect()->route('guest.IT');
+        } elseif ($faculty === 'Maketing') {
+            return redirect()->route('guest.Maketing');
+        } elseif ($faculty === 'Public Relation') {
+            return redirect()->route('guest.PR');
         }
+
     }
 
     public function BA_index()
@@ -102,6 +107,48 @@ class UserController extends Controller
         ]);
     }
 
+    public function PR_index()
+    {
+        $userFaculty = user::where('faculty', 'Public Relation')->first();
+        $contributions = Contribution::where('user_id', $userFaculty->id)
+            ->where('status', 'accepted')
+            ->paginate(2);
+        // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
+        $htmlContents = [];
+        foreach ($contributions as $contribution) {
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $phpWord = IOFactory::load($wordFilePath);
+            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+        }
+
+        return view('guest.PR', [
+            'contributions' => $contributions,
+            'htmlContents' => $htmlContents,
+        ]);
+    }
+
+    public function Maketing_index()
+    {
+        $userFaculty = user::where('faculty', 'Maketing')->first();
+        $contributions = Contribution::where('user_id', $userFaculty->id)
+            ->where('status', 'accepted')
+            ->paginate(2);
+        // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
+        $htmlContents = [];
+        foreach ($contributions as $contribution) {
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+            $phpWord = IOFactory::load($wordFilePath);
+            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+        }
+
+        return view('guest.Maketing', [
+            'contributions' => $contributions,
+            'htmlContents' => $htmlContents,
+        ]);
+    }
+
     public function check_login()
     {
         request()->validate([
@@ -141,7 +188,7 @@ class UserController extends Controller
             'password' => 'required|min:6',
             'confirm_password' => 'required|same:password',
             'role' => 'required|in:Administrator,Student,Marketing Coordinator,University Marketing Manager',
-            'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology',
+            'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology,Maketing,Public Relation',
         ]);
         $request = request()->only('name', 'email', 'password', 'role', 'faculty');
         $request['password'] = bcrypt(request('password'));
@@ -181,7 +228,7 @@ class UserController extends Controller
                 'email' => 'required|email|unique:users',
                 'password' => 'required|same:confirm_password',
                 'role' => 'required|in:Administrator,Student,Marketing Coordinator,University Marketing Manager',
-                'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology',
+                'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology,Maketing,Public Relation',
             ]
 
         );
@@ -202,7 +249,7 @@ class UserController extends Controller
     {
         $request->validate([
             'role' => 'required|in:Administrator,Student,Marketing Coordinator,University Marketing Manager',
-            'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology',
+            'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology,Maketing,Public Relation',
         ]);
         $user->update($request->only('role', 'faculty'));
 
