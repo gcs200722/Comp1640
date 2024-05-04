@@ -41,6 +41,11 @@
                         <option value="Information technology"
                             {{ $user->faculty == 'Information technology' ? 'selected' : '' }}>Information technology
                         </option>
+                        <option value="Maketing" {{ $user->faculty == 'Maketing' ? 'selected' : '' }}>Maketing
+                        </option>
+                        <option value="Public Relation" {{ $user->faculty == 'Public Relation' ? 'selected' : '' }}>Public
+                            Relation
+                        </option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>

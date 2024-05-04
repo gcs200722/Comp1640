@@ -20,6 +20,6 @@ class checkStudent
         }
         Auth::logout();
 
-        return redirect()->route('login')->with('error', 'Bạn không có quyền truy cập.');
+        return redirect()->route('login')->with('error', 'You do not have access..');
     }
 }

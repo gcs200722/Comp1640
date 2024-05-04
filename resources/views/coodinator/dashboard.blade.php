@@ -34,48 +34,38 @@
             </div>
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
-        <canvas id="statusChart" width="800" height="400"></canvas>
+        <div style="display: flex; justify-content: space-between;">
+            <canvas id="statusChart" width="800" height="400"></canvas>
+        </div>
 
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            var statusLabels = @json($statusLabels);
-            var data = @json($data);
-
-            var datasets = [];
-            statusLabels.forEach(function(status) {
-                datasets.push({
-                    label: status,
-                    data: data[status],
-                    backgroundColor: getRandomColor(),
-                    borderWidth: 1
-                });
-            });
-
             var ctx = document.getElementById('statusChart').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: statusLabels,
-                    datasets: datasets
+                    labels: {!! json_encode($statusLabels) !!},
+                    datasets: [
+                        @foreach ($data as $status => $counts)
+                            {
+                                label: '{{ $status }}',
+                                data: {!! json_encode($counts) !!},
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)', // Màu nền của các cột
+                                borderColor: 'rgba(54, 162, 235, 1)', // Màu đường viền của các cột
+                                borderWidth: 1
+                            },
+                        @endforeach
+                    ]
                 },
                 options: {
                     scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
             });
-
-            function getRandomColor() {
-                var letters = '0123456789ABCDEF';
-                var color = '#';
-                for (var i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
-            }
         </script>
     </body>
 @endsection

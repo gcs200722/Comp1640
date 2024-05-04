@@ -18,6 +18,16 @@ class CoodinatorController extends Controller
         return view('coodinator.home', compact('user'));
     }
 
+    public function show(Contribution $contribution)
+    {
+        $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+        $phpWord = IOFactory::load($wordFilePath);
+        $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+        $htmlContents = $htmlWriter->getContent();
+
+        return view('coodinator.show', compact('contribution', 'htmlContents'));
+    }
+
     public function dashboard(Request $request)
     {
         // Lấy người dùng hiện tại và khoa của họ
@@ -37,6 +47,7 @@ class CoodinatorController extends Controller
                 ->whereMonth('approval_date', $selectedDate->month)
                 ->get();
         }
+
         // Truy vấn cơ sở dữ liệu để lấy số lượng bài nộp theo 'status' của người dùng trong khoa của họ
         $query = Contribution::whereHas('user', function ($query) use ($faculty) {
             $query->where('faculty', $faculty);
@@ -56,7 +67,7 @@ class CoodinatorController extends Controller
 
         $data = [];
         foreach ($statusLabels as $status) {
-            $data[$status] = $contributionsByStatus->where('status', $status)->pluck('count');
+            $data[$status] = $contributionsByStatus->where('status', $status)->pluck('count')->toArray();
         }
 
         return view('coodinator.dashboard', compact('statusLabels', 'data'));
@@ -68,14 +79,26 @@ class CoodinatorController extends Controller
         $userFaculty = $user->faculty;
         $contributions = Contribution::where('status', 'pending')->whereHas('user', function ($query) use ($userFaculty) {
             $query->where('faculty', $userFaculty);
-        })->paginate(2);
+        })->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
+        }
+
+        foreach ($contributions as $contribution) {
+            $comment = $contribution->load('comments');
         }
 
         return view('coodinator.contribution', [
@@ -95,9 +118,17 @@ class CoodinatorController extends Controller
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('coodinator.approve', [
@@ -117,9 +148,17 @@ class CoodinatorController extends Controller
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('coodinator.rejected', [

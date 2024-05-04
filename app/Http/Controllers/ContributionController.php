@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Contribution;
 use App\Models\SubmissionDate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ContributionController extends Controller
 {
@@ -68,5 +70,31 @@ class ContributionController extends Controller
         $contribution->save();
 
         return redirect()->route('student.show')->with('success', 'Contribution updated successfully!');
+    }
+
+    public function store_contribution(Request $request, $contribution_id)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+        $comment = new Comment();
+        $comment->contribution_id = $contribution_id;
+        $comment->user_id = Auth::id();
+        $comment->content = $request->input('content');
+        $comment->save();
+
+        return redirect()->Route('contribution')->with('success', 'Comment added successfully.');
+    }
+
+    public function destroy_comment(Comment $comment)
+    {
+        // Kiểm tra quyền hạn của người dùng, ví dụ: chỉ cho phép chủ bình luận xóa
+        if ($comment->user_id === auth()->id()) {
+            $comment->delete();
+
+            return redirect()->back()->with('success', 'Comment deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'You do not have permission to delete this comment.');
+        }
     }
 }

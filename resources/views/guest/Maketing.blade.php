@@ -1,71 +1,82 @@
-<!DOCTYPE html>
-<html>
+@extends('layout.main')
+@section('2')
+    <div class="card bg-primary text-white">
+        <div class="card bg-primary text-white">
+            <div class="card-header" style="text-align:center;">List Contribution </div>
+            <div class="card-body" style="margin-left:auto;margin-right:auto">
+                <div class="table-responsive" style="text-align:center">
+                    @foreach ($contributions as $contribution)
+                        <table style="width: 40%;margin-left:auto;margin-right:auto">
+                            <br>
+                            <tr>
+                                <th>Status</th>
+                                <td style="color: black">{{ $contribution->status }}</td>
+                            </tr>
+                            <tr>
+                                <th>Title</th>
+                                <td style="color: black">{{ $contribution->title }}</td>
+                            </tr>
+                            <tr>
+                                <th>Content</th>
+                                <td style="color: black">{{ $contribution->content }}</td>
+                            </tr>
+                            <tr>
+                                <th>Image</th>
+                                <td style="color: black; width: 200px; height: 100px;">
+                                    @if ($contribution->image_path)
+                                        <img src="{{ asset('storage/' . $contribution->image_path) }}"
+                                            alt="Contribution Image" style="max-width: 100px;" class="zoomable-image">
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Preview</th>
+                                <td style="color: black; width: 500px; height: 100px;">
+                                    @if (isset($htmlContents[$contribution->id]))
+                                        <div style="width: 900px; height: 300px; overflow: auto;">{!! $htmlContents[$contribution->id] !!}
+                                        </div>
+                                    @endif
+                                </td>
+                            </tr>
+                        </table>
+                    @endforeach
+                </div>
 
-<head>
-    <title>University</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="{{ url('layout/styles/layout.css') }}" rel="stylesheet" type="text/css" media="all">
-</head>
-
-<body id="top">
-
-    <div class="wrapper row0">
-        <div id="topbar" class="clear">
-            <nav>
-                <ul>
-                    <li><a href="{{ route('guest.IT') }}">Home</a></li>
-                    <li><a href="{{ route('logout') }}">SignOut</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-    <div class="wrapper row1">
-        <header id="header" class="clear">
-            <div id="logo" class="fl_left">
-                <h1><a href="#">University</a></h1>
-                <p>University magazine</p>
             </div>
-        </header>
-    </div>
-
-    <div class="wrapper row2" style="color: rgb(52, 51, 50)">
-        <div class="rounded">
-            <nav id="mainav" class="clear">
-                <ul class="clear">
-                    <h2>Approve Contribution Of Maketing</h2>
-                </ul>
-            </nav>
         </div>
-
     </div>
-    <ul>
-        @foreach ($contributions as $contribution)
-            <li>
-                <strong>Title:</strong> {{ $contribution->title }}<br>
-                <strong>Content:</strong> {{ $contribution->content }}<br>
-                <!-- Hiển thị hình ảnh nếu có -->
-                @if ($contribution->image_path)
-                    <img src="{{ asset('storage/' . $contribution->image_path) }}" alt="Contribution Image"
-                        style="max-width: 200px;"><br>
-                @endif
-                @if (isset($htmlContents[$contribution->id]))
-                    <div style="width: 600px; height: 400px; overflow: auto ; color:rgb(132, 144, 155)">
-                        {!! $htmlContents[$contribution->id] !!}</div>
-                @endif
-                <!-- Hiển thị tệp tin Word nếu có -->
-            </li>
-        @endforeach
-    </ul>
-    <div class="pagination">
-        {{ $contributions->links() }}
-    </div>
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var zoomableImages = document.querySelectorAll('.zoomable-image');
+            zoomableImages.forEach(function(image) {
+                image.addEventListener('click', function() {
+                    // Tạo một phần tử div để chứa hình ảnh phóng to
+                    var overlay = document.createElement('div');
+                    overlay.style.position = 'fixed';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100%';
+                    overlay.style.height = '100%';
+                    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                    overlay.style.zIndex = '9999';
+                    overlay.style.display = 'flex';
+                    overlay.style.justifyContent = 'center';
+                    overlay.style.alignItems = 'center';
 
-    <script src="{{ url('layout/scripts/jquery.min.js') }}"></script>
-    <script src="{{ url('layout/scripts/jquery.fitvids.min.js') }}"></script>
-    <script src="{{ url('layout/scripts/jquery.mobilemenu.js') }}"></script>
-    <script src="{{ url('layout/scripts/tabslet/jquery.tabslet.min.js') }}"></script>
-</body>
+                    var enlargedImage = document.createElement('img');
+                    enlargedImage.src = image.src;
+                    enlargedImage.style.maxHeight = '90%';
+                    enlargedImage.style.maxWidth = '90%';
 
-</html>
+                    overlay.appendChild(enlargedImage);
+
+                    document.body.appendChild(overlay);
+
+                    overlay.addEventListener('click', function() {
+                        document.body.removeChild(overlay);
+                    });
+                });
+            });
+        });
+    </script>
+@endsection

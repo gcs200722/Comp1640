@@ -5,8 +5,8 @@
             <nav id="mainav" class="clear">
                 <ul class="clear">
                     <li><a class="active" href="{{ route('student.submit') }}">Contribution</a>
-                    <li><a class="active" href="#">Profiile</a>
-                    <li class="active"><a href="{{ route('student.home') }}">Home</a></li>
+                    <li><a class="active" href="{{ route('student.home') }}">Home</a></li>
+                    <li><a class="active" href="{{ route('student.show') }}">Contribution Show</a></li>
                 </ul>
             </nav>
         </div>

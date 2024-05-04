@@ -49,14 +49,23 @@ class UserController extends Controller
         $userFaculty = user::where('faculty', 'Business administration')->first();
         $contributions = Contribution::where('user_id', $userFaculty->id)
             ->where('status', 'accepted')
-            ->paginate(2);
+            ->take(4)
+            ->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('guest.BA', [
@@ -70,14 +79,23 @@ class UserController extends Controller
         $userFaculty = user::where('faculty', 'Graphics and Digital Design')->first();
         $contributions = Contribution::where('user_id', $userFaculty->id)
             ->where('status', 'accepted')
-            ->paginate(2);
+            ->take(4)
+            ->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('guest.graphics', [
@@ -91,14 +109,23 @@ class UserController extends Controller
         $userFaculty = user::where('faculty', 'Information technology')->first();
         $contributions = Contribution::where('user_id', $userFaculty->id)
             ->where('status', 'accepted')
-            ->paginate(2);
+            ->take(4)
+            ->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('guest.IT', [
@@ -112,14 +139,23 @@ class UserController extends Controller
         $userFaculty = user::where('faculty', 'Public Relation')->first();
         $contributions = Contribution::where('user_id', $userFaculty->id)
             ->where('status', 'accepted')
-            ->paginate(2);
+            ->take(4)
+            ->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('guest.PR', [
@@ -133,14 +169,23 @@ class UserController extends Controller
         $userFaculty = user::where('faculty', 'Maketing')->first();
         $contributions = Contribution::where('user_id', $userFaculty->id)
             ->where('status', 'accepted')
-            ->paginate(2);
+            ->take(4)
+            ->get();
         // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('guest.Maketing', [
@@ -171,7 +216,7 @@ class UserController extends Controller
                 return redirect()->route('manager.home');
             }
         } else {
-            return redirect()->back()->with('error', 'Email hoặc mật khẩu không chính xác. Vui lòng thử lại.');
+            return redirect()->back()->with('error', 'Email or password is incorrect. Please try again.');
         }
     }
 
@@ -208,9 +253,14 @@ class UserController extends Controller
         return redirect('/login');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = user::orderby('id', 'DESC')->get();
+        $role = $request->input('role');
+        $users = User::orderBy('id', 'DESC');
+        if ($role) {
+            $users->where('role', $role);
+        }
+        $users = $users->get();
 
         return view('admin.user', compact('users'));
     }
@@ -226,7 +276,7 @@ class UserController extends Controller
             [
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
-                'password' => 'required|same:confirm_password',
+                'password' => 'required',
                 'role' => 'required|in:Administrator,Student,Marketing Coordinator,University Marketing Manager',
                 'faculty' => 'required|in:Business administration,Graphics and Digital Design,Information technology,Maketing,Public Relation',
             ]

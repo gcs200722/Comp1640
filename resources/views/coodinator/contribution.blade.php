@@ -60,7 +60,9 @@
                             <th>Content</th>
                             <th>Image</th>
                             <th>Word File</th>
+
                             <th>Actions</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -84,6 +86,7 @@
                                         @endif
                                     </td>
                                     <td>
+
                                         <form method="post" action="{{ route('approve', $contribution->id) }}">
                                             @csrf @method('put')
                                             <button class="btn ">approve</a></button>

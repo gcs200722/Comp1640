@@ -12,14 +12,15 @@
                 <nav id="mainav" class="clear">
                     <ul class="clear">
                         <li><a class="active" href="{{ route('student.submit') }}">Contribution</a>
-
-                        <li class="active"><a href="{{ route('student.home') }}">Home</a></li>
-                        <li class="active"><a href="{{ route('student.show') }}">Contribution Show</a></li>
+                        <li><a class="active" href="{{ route('student.home') }}">Home</a></li>
+                        <li><a class="active" href="{{ route('student.show') }}">Contribution Show</a></li>
                     </ul>
                 </nav>
 
             </div>
         </div>
+
+
     </head>
     <div class="row justify-content-center">
         @if (session()->has('success'))
@@ -47,8 +48,12 @@
 
                     <label style="color: black" for="word_file">Word File:</label><br>
                     <input style="color: black" type="file" id="word_file" name="word_file"><br>
+                    <textarea style="color: black" id="terms" name="terms" rows="5" cols="50" readonly>All information herein is provided to you in good faith. However, Architecture Magazine does not guarantee or make any representations regarding the accuracy or reliability of content excerpted from elsewhere. Although we always try to update and regularly verify the content on the website.
+                    </textarea>
 
-                    <button class="btn-btn-primary" type="submit">Submit</button>
+                    <input type="checkbox" id="agree" name="agree" required>
+                    <label for="agree" style="color: black">I agree to the terms and conditions.</label>
+                    <button type="submit" class="btn btn-primary custom-button">Submit</button>
                     <label style="color: black">Students please submit your contributions before the due date:
                         {{ $submissionDate->closed_at }}</label>
 

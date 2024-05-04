@@ -23,9 +23,17 @@ class StudentController extends Controller
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('student.show', compact('user', 'contributions', 'htmlContents'));

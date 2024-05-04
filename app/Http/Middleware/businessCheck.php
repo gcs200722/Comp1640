@@ -18,6 +18,6 @@ class businessCheck
             return $next($request);
         }
 
-        return redirect()->route('logout')->with('error', 'Bạn không có quyền truy cập.');
+        return redirect()->route('logout')->with('error', 'You do not have access..');
     }
 }

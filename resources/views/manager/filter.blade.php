@@ -1,5 +1,29 @@
 @extends('layout.main')
 @section('2')
+    <div class="wrapper row2" style="margin-top: 20px;">
+        <div class="rounded">
+            <nav id="mainav" class="clear">
+                <ul class="clear">
+                    <li><a class="active" href="{{ route('manager.contribution') }}">Contribution</a></li>
+                    <li class="active"><a href="{{ route('manager.home') }}">Home</a></li>
+                    <li class="active"><a href="{{ route('manager.dashboard') }}">Dashboard</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <form action="{{ route('contributions.filter') }}" method="GET">
+        <label for="faculty">Select Faculty</label>
+        <select name="faculty" id="faculty">
+            <option style="color: black" value="Business administration">Business administration</option>
+            <option style="color: black" value="Graphics and Digital Design">Graphics and Digital Design</option>
+            <option style="color: black" value="Information technology">Information technology</option>
+            <option style="color: black" value="Maketing">Maketing</option>
+            <option style="color: black" value="Public Relation">Public Relation</option>
+            <!-- Thêm các option khác tương ứng với các khoa của bạn -->
+        </select>
+        <button type="submit">Filter</button>
+    </form>
     <div class="card bg-primary text-white">
         <div class="card bg-primary text-white">
             <div class="card-header" style="text-align:center;">List Contribution </div>

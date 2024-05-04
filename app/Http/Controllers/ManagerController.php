@@ -65,6 +65,37 @@ class ManagerController extends Controller
         return view('manager.dashboard', compact('filteredData', 'facultyNames', 'contributionCounts', 'percentageByFaculty'));
     }
 
+    public function filter(Request $request)
+    {
+        $faculty = $request->input('faculty');
+        $contributions = Contribution::where('status', 'accepted')
+            ->whereHas('user', function ($query) use ($faculty) {
+                $query->where('faculty', $faculty);
+            })->get();
+        // Chuyển đổi trực tiếp từ tệp Word sang HTML và lưu vào mảng
+        $htmlContents = [];
+        foreach ($contributions as $contribution) {
+            $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
+        }
+
+        return view('manager.filter', [
+            'contributions' => $contributions,
+            'htmlContents' => $htmlContents,
+        ]);
+
+    }
+
     public function showcontribution()
     {
         $contributions = Contribution::where('status', 'accepted')
@@ -73,9 +104,17 @@ class ManagerController extends Controller
         $htmlContents = [];
         foreach ($contributions as $contribution) {
             $wordFilePath = storage_path('app/public/'.$contribution->word_file_path);
-            $phpWord = IOFactory::load($wordFilePath);
-            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
-            $htmlContents[$contribution->id] = $htmlWriter->getContent();
+
+            // Kiểm tra xem đường dẫn tới tệp Word có tồn tại không
+            if (! empty($contribution->word_file_path) && file_exists($wordFilePath)) {
+                $phpWord = IOFactory::load($wordFilePath);
+                $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+                $htmlContents[$contribution->id] = $htmlWriter->getContent();
+            } else {
+                $comment = 'No comment available'; // Bỏ qua việc xử lý nếu không có đường dẫn tới tệp Word
+
+                continue;
+            }
         }
 
         return view('manager.contribution', [

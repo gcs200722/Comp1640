@@ -10,12 +10,12 @@
 
 <body>
     @if (session()->has('error'))
-        <div class="alert alert-success">
+        <div class="alert alert-success" style="color: white">
             {{ session()->get('error') }}
         </div>
     @endif
     @if (session()->has('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success" style="color: white">
             {{ session()->get('message') }}
         </div>
     @endif
